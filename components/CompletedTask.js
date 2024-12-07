@@ -1,30 +1,30 @@
-import React, { Fragment, useContext } from 'react';
-import { TaskContext } from '../context/TaskContext'; // Import the context
-import styles from './CompletedTask.module.css';
+import React, { useState } from 'react';
 import Header from './Header';
+import styles from './CompletedTask.module.css';
 
-const CompletedTask = () => {
-    const { completedTasks } = useContext(TaskContext); // Directly use useContext to get completed tasks
+const CompletedTask = (props) => {
+    const [completedTasks, setCompletedTasks] = useState(props.initialCompletedTasks);
 
     return (
-        <Fragment>
+        <>
             <Header />
             <div className={styles.body}>
                 <h1 className={styles.header}>Completed Tasks</h1>
-                {completedTasks.length === 0 ? (
-                    <p>No tasks completed yet.</p>
-                ) : (
-                    <ul className={styles.completedTaskList}>
-                        {completedTasks.map((task, index) => (
-                            <li key={index} className={styles.completedTaskItem}>
-                                <p>{task}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <ul className={styles.completedTaskList}>
+                    {completedTasks && completedTasks.length>0 ?(completedTasks.map((task, index) => (
+                        <li key={index} className={styles.completedTaskItem}>
+                            {task.task}
+                        </li>
+                    ))) : (
+                        <p>No tasks available</p>
+                      )}
+                    
+                </ul>
             </div>
-        </Fragment>
+        </>
     );
 };
+
+
 
 export default CompletedTask;

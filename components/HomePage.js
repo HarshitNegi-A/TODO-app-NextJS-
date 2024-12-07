@@ -1,86 +1,131 @@
-import React, { useState, Fragment, useContext } from 'react';
-import { TaskContext } from '../context/TaskContext'; // Import the context
-import styles from './HomePage.module.css';
-import Header from './Header';
+import React, { useState } from "react";
+import Header from "./Header";
+import styles from "./HomePage.module.css";
 
-const HomePage = () => {
-    const [newTask, setNewTask] = useState('');
-    const { tasks, completedTasks, addTask, completeTask, deleteTask } = useContext(TaskContext); // Directly use useContext
+const HomePage = (props) => {
+  const [tasks, setTasks] = useState(props.initialTasks);
+  const [newTask, setNewTask] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-    const [showModal, setShowModal] = useState(false);
+  const handleAddTask = async () => {
+    // if (newTask.trim() !== '') {
+    //     const res = await fetch('/api/tasks/add', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ task: newTask }),
+    //     });
+    //     const data = await res.json();
 
-    // Handle adding a new task
-    const handleAddTask = () => {
-        if (newTask.trim() !== '') {
-            addTask(newTask);
-            setNewTask('');
-            setShowModal(false); // Close modal after adding task
-        }
-    };
+    setTasks([...tasks, { task: newTask }]);
+    setNewTask("");
+    setShowModal(false);
 
-    return (
-        <Fragment>
-            <Header />
-            <div className={styles.body}>
-                <button
-                    className={styles.addTaskButton}
-                    onClick={() => setShowModal(true)}
-                >
-                    Add Task
-                </button>
-                <div className={styles.wrapper}>
-                    <h1 className={styles.header}>All Tasks</h1>
-                    <ul className={styles.taskList}>
-                        {tasks.map((task, index) => (
-                            <li key={index} className={styles.taskItem}>
-                                {task}
-                                <button
-                                    className={styles.completeButton}
-                                    onClick={() => completeTask(index)}
-                                >
-                                    Complete
-                                </button>
-                                <button
-                                    className={styles.deleteButton}
-                                    onClick={() => deleteTask(index)}
-                                >
-                                    Delete
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+    props.onAdd(newTask);
+    // }
+  };
 
-                {/* Modal */}
-                {showModal && (
-                    <div className={styles.modalBackdrop}>
-                        <div className={styles.modal}>
-                            <h2>Add New Task</h2>
-                            <input
-                                type="text"
-                                className={styles.inputField}
-                                placeholder="Enter task"
-                                value={newTask}
-                                onChange={(e) => setNewTask(e.target.value)}
-                            />
-                            <button
-                                className={styles.modalButton}
-                                onClick={handleAddTask}
-                            >
-                                Add
-                            </button>
-                            <button
-                                className={styles.modalCloseButton}
-                                onClick={() => setShowModal(false)}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                )}
+  const handleCompleteTask = async (index) => {
+    
+    const taskId = tasks[index]._id;
+    
+    // const res = await fetch("/api/tasks/complete", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ taskId }),
+    // });
+    // const data = await res.json();
+   
+      const newTasks = tasks.filter((_, i) => i !== index);
+      setTasks(newTasks);
+      props.onComplete(taskId)
+    
+  };
+
+  const handleDeleteTask = async (index) => {
+    const taskId = tasks[index]._id;
+   
+    // const res = await fetch("/api/tasks/delete", {
+    //   method: "DELETE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ taskId }),
+    // });
+    // const data = await res.json();
+    
+      const newTasks = tasks.filter((_, i) => i !== index);
+      setTasks(newTasks);
+      props.onDelete(taskId)
+  };
+
+  return (
+    <>
+      <Header />
+      <div className={styles.body}>
+        <button
+          className={styles.addTaskButton}
+          onClick={() => setShowModal(true)}
+        >
+          Add Task
+        </button>
+        <div className={styles.wrapper}>
+          <h1 className={styles.header}>All Tasks</h1>
+          <ul className={styles.taskList}>
+            {tasks && tasks.length > 0 ? (
+              tasks.map((task, index) => (
+                <li key={index} className={styles.taskItem}>
+                  {task.task}
+                  <button
+                    className={styles.completeButton}
+                    onClick={() => handleCompleteTask(index)}
+                  >
+                    Complete
+                  </button>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => handleDeleteTask(index)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))
+            ) : (
+              <p>No tasks available</p>
+            )}
+          </ul>
+        </div>
+
+        {/* Modal */}
+        {showModal && (
+          <div className={styles.modalBackdrop}>
+            <div className={styles.modal}>
+              <h2>Add New Task</h2>
+              <input
+                type="text"
+                className={styles.inputField}
+                placeholder="Enter task"
+                value={newTask}
+                onChange={(e) => setNewTask(e.target.value)}
+              />
+              <button className={styles.modalButton} onClick={handleAddTask}>
+                Add
+              </button>
+              <button
+                className={styles.modalCloseButton}
+                onClick={() => setShowModal(false)}
+              >
+                Close
+              </button>
             </div>
-        </Fragment>
-    );
+          </div>
+        )}
+      </div>
+    </>
+  );
 };
 
 export default HomePage;
