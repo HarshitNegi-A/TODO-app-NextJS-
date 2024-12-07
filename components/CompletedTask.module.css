@@ -1,0 +1,53 @@
+/* CompletedTask.module.css */
+.body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.header {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.completedTaskList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.completedTaskItem {
+    background-color: #e8f5e9;
+    padding: 10px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.completedTaskItem p {
+    margin: 0;
+    color: #4CAF50;
+    font-size: 1.1rem;
+}
+
+.goBackButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+    display: block;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.goBackButton:hover {
+    background-color: #45a049;
+}
