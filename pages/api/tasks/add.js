@@ -10,7 +10,6 @@ export default async (req, res) => {
         // Insert new task into the 'tasks' collection
         const result = await db.collection('tasks').insertOne({
             task,
-            completed: false,
         });
         client.close();
 

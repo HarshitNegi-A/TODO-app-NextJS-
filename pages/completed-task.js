@@ -3,7 +3,7 @@ import CompletedTask from "../components/CompletedTask";
 import { MongoClient } from "mongodb"
 
 function Task(props){
-    return <CompletedTask props={props.initialCompletedTasks}/>
+    return <CompletedTask initialCompletedTasks={props.initialCompletedTasks}/>
 }
 
 export async function getStaticProps() {
@@ -12,7 +12,7 @@ export async function getStaticProps() {
         const db = client.db()
 
     // Fetch completed tasks from the 'completedTasks' collection in MongoDB
-    const completedTasks = await db.collection('completedTasks').find({ completed: true }).toArray();
+    const completedTasks = await db.collection('completedTasks').find().toArray();
 
     // Transform MongoDB ObjectId to string for serialization
     const serializedCompletedTasks = completedTasks.map(task => ({
@@ -23,7 +23,7 @@ export async function getStaticProps() {
 
     return {
         props: {
-            initialCompletedTasks: serializedCompletedTasks || [],
+            initialCompletedTasks: serializedCompletedTasks ,
         },
         revalidate:10
     };

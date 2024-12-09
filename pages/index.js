@@ -6,7 +6,7 @@ import { MongoClient } from "mongodb"
 function Home(props){
     const router=useRouter();
     async function addTODO(task){
-        if (entertedTODO.trim() !== '') {
+        if (task.trim() !== '') {
             const res = await fetch('/api/tasks/add', {
                 method: 'POST',
                 body: JSON.stringify({task:task}),
